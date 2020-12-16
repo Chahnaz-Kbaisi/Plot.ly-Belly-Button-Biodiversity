@@ -46,7 +46,7 @@ d3.json("data/samples.json").then((incomingData) => {
         // Plot 1: Bar Chart
         var trace1 = {
             x: sampleValues,
-            y: sampleotuids.map(outId => `OTU ${outId}`),
+            y: sampleotuids,
             text: sampleotulabels,
             type: "bar",
             orientation: "h",
@@ -65,7 +65,6 @@ d3.json("data/samples.json").then((incomingData) => {
         }
 
         Plotly.newPlot("bar", databar, layoutbar);
-
 
         // 3. Create a bubble chart that displays each sample.
         // Plot 2: Bubble Chart
@@ -90,6 +89,29 @@ d3.json("data/samples.json").then((incomingData) => {
         };
 
         Plotly.newPlot('bubble', databubble, layoutbubble);
+        // DEMOGRAPHIC INFO
+        demoDefault = data.metadata.filter(sample => sample.id === 940)[0];
+        console.log(demoDefault);
+
+        // Display each key-value pair from the metadata JSON object
+        Object.entries(demoDefault).forEach(
+            ([key, value]) => d3.select("#sample-metadata").append("p").text(`${key.toUpperCase()}: ${value}`));
+
+    };
+
+    init();
+
+    // Call updateBar()
+    d3.selectAll("#selDataset").on("change", updatePlot);
+
+    // Function called when dropdown menue items are selected
+    function PlotUpdate() {
+        // Selecting the inputElement using d3
+        var inputElement = d3.select("selDataset");
+
+        // Getting the value property of the input element
+        var inputValue = inputElement.property("value");
+        console.log(inputValue);
 
     };
 });
