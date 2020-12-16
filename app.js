@@ -3,15 +3,15 @@
 // Using d3.json() to fetch data from JSON samples file:
 
 d3.json("data/samples.json").then((incomingData) => {
-
     console.log(incomingData);
 
+    // From samples.json
     var data = incomingData;
     console.log(data);
 
     // Adding test subject id number to the drop down menus
     var names = data.names;
-
+    // Selecting dropdown tag
     names.forEach((name) => {
         d3.select("#selDataset").append("option").text(name);
     })
@@ -82,7 +82,7 @@ d3.json("data/samples.json").then((incomingData) => {
         var BubbleData = [trace2];
 
         var bubblelayout = {
-            title: '<b>Bubble Chart displaying sample values of OTU IDs of the selected individual<b>',
+            title: 'Sample Display',
 
         }
 
@@ -90,13 +90,8 @@ d3.json("data/samples.json").then((incomingData) => {
 
 
 
+        // Demographic ID
 
-        // Demographic Information
-        defaultDemographic = data.metadata.filter(sample.id === 940)[0];
-        console.log(defaultDemographic);
-
-        Object.entries(defaultDemographic).forEach(
-            ([key, value]) => d3.select("#sample-metadata").append("p").text(`${key.toUpperCase()}: ${value}`));
 
 
 
