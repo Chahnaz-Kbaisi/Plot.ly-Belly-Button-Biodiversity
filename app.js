@@ -96,6 +96,7 @@ d3.json("data/samples.json").then((incomingData) => {
 
         // Getting a reference to the table using d3
         var panelBody = d3.select("#sample-metadata");
+        panelBody.html("");
         // Using d3 to append table row to `p` for each metadata
         var row = panelBody.append("p");
         // Using the `Object.entries` to console.log each metadata
@@ -106,6 +107,46 @@ d3.json("data/samples.json").then((incomingData) => {
             cell.text(`${key.toUpperCase()}: ${value}`);
         });
 
+        // Advanced Challenge Assignment (Optional)
+        // Plot 3: Gauge Chart
+        var wfreq = defaultDemographic.wfreq;
+        console.log(wfreq);
+
+        var datagauge = [
+            {
+                type: "indicator",
+                title: "Gauge",
+                value: wfreq,
+                domain: { x: [0, 1], y: [0, 1] },
+                mode: "gauge+number",
+                gauge: {
+                    axis: { range: [null, 9] },
+                    steps: [
+                        { range: [0, 1], color: 'rgb(253, 231, 231)' },
+                        { range: [1, 2], color: 'rgb(253, 231, 237)' },
+                        { range: [2, 3], color: 'rgb(253, 231, 242)' },
+                        { range: [3, 4], color: 'rgb(253, 231, 248)' },
+                        { range: [4, 5], color: 'rgb(253, 231, 253)' },
+                        { range: [5, 6], color: 'rgb(248, 231, 253)' },
+                        { range: [6, 7], color: 'rgb(242, 231, 253)' },
+                        { range: [7, 8], color: 'rgb(237, 231, 253)' },
+                        { range: [8, 9], color: 'rgb(231, 231, 253)' },
+
+                    ],
+                }
+            }
+
+        ];
+        var layoutgauge = {
+            width: 600,
+            height: 400,
+            margin: {
+                t: 1,
+                b: 1,
+            }
+
+        };
+        Plotly.newPlot('gauge', datagauge, layoutgauge);
     };
 
     init();
@@ -160,10 +201,11 @@ d3.json("data/samples.json").then((incomingData) => {
         DemoInfo = data.metadata.filter((sample) => sample.id === inputValue)[0];
 
         // Clear out current contents in the panel
-        tbody.html("");
+
 
         // Getting a reference to the table using d3
         var panelBody = d3.select("#sample-metadata");
+        panelBody.html("");
         // Using d3 to append table row to `p` for each metadata
         var row = panelBody.append("p");
         // Using the `Object.entries` to console.log each metadata
@@ -173,6 +215,11 @@ d3.json("data/samples.json").then((incomingData) => {
             var cell = row.append("p");
             cell.text(`${key.toUpperCase()}: ${value}`);
         });
+
+        // Plot 3: Gauge chart 
+        var advancedwfreq = DemoInfo.wfreq;
+
+        Plotly.restlye('gauge', "value", advancedwfreq);
 
     };
 });
