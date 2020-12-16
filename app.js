@@ -89,13 +89,22 @@ d3.json("data/samples.json").then((incomingData) => {
         };
 
         Plotly.newPlot('bubble', databubble, layoutbubble);
-        // DEMOGRAPHIC INFO
-        demoDefault = data.metadata.filter(sample => sample.id === 940)[0];
-        console.log(demoDefault);
 
-        // Display each key-value pair from the metadata JSON object
-        Object.entries(demoDefault).forEach(
-            ([key, value]) => d3.select("#sample-metadata").append("p").text(`${key.toUpperCase()}: ${value}`));
+        // Filtering Demographic information 
+        defaultDemographic = data.metadata.filter(sample => sample.id === 940)[0];
+        console.log(defaultDemographic);
+
+        // Getting a reference to the table using d3
+        var tbody = d3.select("#sample-metadata");
+        // Using d3 to append table row to `p` for each metadata
+        var row = tbody.append("p");
+        // Using the `Object.entries` to console.log each metadata
+        Object.entries(defaultDemographic).forEach(([key, value]) => {
+            console.log(key, value);
+            // Append a cell to the row for each value
+            var cell = row.append("p");
+            cell.text(`${key.toUpperCase()}: ${value}`);
+        });
 
     };
 
@@ -130,6 +139,13 @@ d3.json("data/samples.json").then((incomingData) => {
         top10Values = idSampleValues.slice(0, 10).reverse();
         top10Ids = idOtuIds.slice(0, 10).reverse();
         top10Labels = idOtuLabels.slice(0, 10).reverse();
+
+        // Plot 1: Bar Chart
+        Plotly.restyle("bar", "x", [top10Values]);
+        Plotly.restyle("bar", "y", [top10Ids.map(outId => `OTU ${outId}`)]);
+        Plotly.restyle("bar", "text", [top10Labels]);
+
+        // Demographic information 
 
 
     };
