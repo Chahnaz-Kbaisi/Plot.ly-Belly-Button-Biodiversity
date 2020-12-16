@@ -49,22 +49,22 @@ d3.json("data/samples.json").then((incomingData) => {
             y: sampleotuids.map(outId => `OTU ${outId}`),
             text: sampleotulabels,
             type: "bar",
-            orientation: "h"
+            orientation: "h",
         };
 
         // data
-        var BarData = [trace1];
+        var databar = [trace1];
 
-        var layout = {
+        var layoutbar = {
             title: "Top 10 UTOs",
             xaxis: { title: "Sample Values" },
             yaxis: { title: "OTU IDs" },
             autosize: false,
             width: 450,
-            height: 600
+            height: 600,
         }
 
-        Plotly.newPlot("bar", BarData, layout);
+        Plotly.newPlot("bar", databar, layoutbar);
 
 
         // 3. Create a bubble chart that displays each sample.
@@ -77,29 +77,21 @@ d3.json("data/samples.json").then((incomingData) => {
             markers: {
                 color: defaultotuids,
                 size: defaultSampleValues,
-            }
+            },
         };
-        var BubbleData = [trace2];
+        var databubble = [trace2];
 
-        var bubblelayout = {
+        var layoutbubble = {
             title: 'Sample Display',
+            xaxis: { title: "OTU IDs" },
+            yaxis: { title: "Sample Value" },
+            showlegend: false,
 
-        }
+        };
 
-        Plotly.newPlot('bubble', BubbleData, bubblelayout);
+        Plotly.newPlot('bubble', databubble, layoutbubble);
 
-
-
-        // Demographic ID
-
-
-
-
-
-
-    }
-
-
+    };
 });
 
 
