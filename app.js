@@ -14,7 +14,7 @@ d3.json("data/samples.json").then((incomingData) => {
     // Selecting dropdown tag
     names.forEach((name) => {
         d3.select("#selDataset").append("option").text(name);
-    })
+    });
 
     // 2. Create a horizontal bar chart with a dropdown menu to display the top 10 OTUs found in that individual.     
 
@@ -46,7 +46,7 @@ d3.json("data/samples.json").then((incomingData) => {
         // Plot 1: Bar Chart
         var trace1 = {
             x: sampleValues,
-            y: sampleotuids,
+            y: sampleotuids.map(outId => `OTU ${outId}`),
             text: sampleotulabels,
             type: "bar",
             orientation: "h",
@@ -60,7 +60,7 @@ d3.json("data/samples.json").then((incomingData) => {
             xaxis: { title: "Sample Values" },
             yaxis: { title: "OTU IDs" },
             autosize: false,
-            width: 450,
+            width: 500,
             height: 600,
         }
 
@@ -73,7 +73,7 @@ d3.json("data/samples.json").then((incomingData) => {
             y: defaultSampleValues,
             text: defaultotulabels,
             mode: 'markers',
-            markers: {
+            marker: {
                 color: defaultotuids,
                 size: defaultSampleValues,
             },
@@ -95,9 +95,9 @@ d3.json("data/samples.json").then((incomingData) => {
         console.log(defaultDemographic);
 
         // Getting a reference to the table using d3
-        var tbody = d3.select("#sample-metadata");
+        var panelBody = d3.select("#sample-metadata");
         // Using d3 to append table row to `p` for each metadata
-        var row = tbody.append("p");
+        var row = panelBody.append("p");
         // Using the `Object.entries` to console.log each metadata
         Object.entries(defaultDemographic).forEach(([key, value]) => {
             console.log(key, value);
@@ -110,13 +110,16 @@ d3.json("data/samples.json").then((incomingData) => {
 
     init();
 
-    // Call updateBar()
-    d3.selectAll("#selDataset").on("change", updatePlot);
+    // Call updatePlotly() when a change takes place to select different subject text id
+    d3.selectAll("body").on("change", updatePlotly);
 
     // Function called when dropdown menue items are selected
-    function PlotUpdate() {
-        // Selecting the inputElement using d3
+    function updatePlotly() {
+        // Use D3 to select the dropdown menu
         var inputElement = d3.select("selDataset");
+
+        // Assign the value of the dropdown menu option to a variable
+        // var switchValue = inputElement.node().value;
 
         // Getting the value property of the input element
         var inputValue = inputElement.property("value");
@@ -140,24 +143,39 @@ d3.json("data/samples.json").then((incomingData) => {
         top10Ids = idOtuIds.slice(0, 10).reverse();
         top10Labels = idOtuLabels.slice(0, 10).reverse();
 
+
         // Plot 1: Bar Chart
         Plotly.restyle("bar", "x", [top10Values]);
         Plotly.restyle("bar", "y", [top10Ids.map(outId => `OTU ${outId}`)]);
         Plotly.restyle("bar", "text", [top10Labels]);
 
-        // Demographic information 
+        // Plot 2: Bubble Chart
+        Plotly.restlye('bubble', "x", [idOtuIds]);
+        Plotly.restlye('bubble', "y", [idSampleValues]);
+        Plotly.restlye('bubble', "text", [idOtuLabels]);
+        Plotly.restlye('bubble', "market.color", [idOtuIds]);
+        Plotly.restlye('bubble', "marker.size", [idSampleValues]);
 
+        // Demographic information 
+        DemoInfo = data.metadata.filter((sample) => sample.id === inputValue)[0];
+
+        // Clear out current contents in the panel
+        tbody.html("");
+
+        // Getting a reference to the table using d3
+        var panelBody = d3.select("#sample-metadata");
+        // Using d3 to append table row to `p` for each metadata
+        var row = panelBody.append("p");
+        // Using the `Object.entries` to console.log each metadata
+        Object.entries(DemoInfo).forEach(([key, value]) => {
+            console.log(key, value);
+            // Append a cell to the row for each value
+            var cell = row.append("p");
+            cell.text(`${key.toUpperCase()}: ${value}`);
+        });
 
     };
 });
-
-
-
-
-
-
-
-
 
 
 
