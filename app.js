@@ -117,8 +117,6 @@ d3.json("data/samples.json").then((incomingData) => {
         var datagauge = [
             {
                 type: "indicator",
-                name: 'WFREQ',
-                hoverinfo: 'name',
                 marker: { size: 28, color: '850000' },
                 title: "Number of Belly Button Washes per Week",
                 value: wfreq,
@@ -147,8 +145,8 @@ d3.json("data/samples.json").then((incomingData) => {
             width: 600,
             height: 400,
             margin: {
-                t: 1,
-                b: 1,
+                t: 0,
+                b: 0,
             }
         };
         Plotly.newPlot('gauge', datagauge, layoutgauge);
