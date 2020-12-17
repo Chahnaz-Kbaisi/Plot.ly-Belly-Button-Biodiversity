@@ -1,12 +1,12 @@
 // Step 1: Plotly
 // 1. Use the D3 library to read in `samples.json`.
 // Using d3.json() to fetch data from JSON samples file:
-
+var data;
 d3.json("data/samples.json").then((incomingData) => {
     console.log(incomingData);
 
     // From samples.json
-    var data = incomingData;
+    data = incomingData;
     console.log(data);
 
     // Adding test subject id number to the drop down menus
@@ -75,6 +75,7 @@ d3.json("data/samples.json").then((incomingData) => {
             mode: 'markers',
             marker: {
                 color: defaultotuids,
+                colorscale: "Rainbow",
                 size: defaultSampleValues,
             },
         };
@@ -85,7 +86,8 @@ d3.json("data/samples.json").then((incomingData) => {
             xaxis: { title: "OTU IDs" },
             yaxis: { title: "Sample Value" },
             showlegend: false,
-
+            height: 600,
+            width: 1200,
         };
 
         Plotly.newPlot('bubble', databubble, layoutbubble);
@@ -115,22 +117,26 @@ d3.json("data/samples.json").then((incomingData) => {
         var datagauge = [
             {
                 type: "indicator",
-                title: "Gauge",
+                name: 'WFREQ',
+                hoverinfo: 'name',
+                marker: { size: 28, color: '850000' },
+                title: "Number of Belly Button Washes per Week",
                 value: wfreq,
                 domain: { x: [0, 1], y: [0, 1] },
                 mode: "gauge+number",
                 gauge: {
                     axis: { range: [null, 9] },
+                    bar: { color: "darkgreen" },
                     steps: [
-                        { range: [0, 1], color: 'rgb(253, 231, 231)' },
-                        { range: [1, 2], color: 'rgb(253, 231, 237)' },
-                        { range: [2, 3], color: 'rgb(253, 231, 242)' },
-                        { range: [3, 4], color: 'rgb(253, 231, 248)' },
-                        { range: [4, 5], color: 'rgb(253, 231, 253)' },
-                        { range: [5, 6], color: 'rgb(248, 231, 253)' },
-                        { range: [6, 7], color: 'rgb(242, 231, 253)' },
-                        { range: [7, 8], color: 'rgb(237, 231, 253)' },
-                        { range: [8, 9], color: 'rgb(231, 231, 253)' },
+                        { range: [0, 1], color: 'rgb(248, 243, 236)' },
+                        { range: [1, 2], color: 'rgb(244, 241, 229)' },
+                        { range: [2, 3], color: 'rgb(233, 230, 202)' },
+                        { range: [3, 4], color: 'rgb(229, 231, 179)' },
+                        { range: [4, 5], color: 'rgb(213, 228, 157)' },
+                        { range: [5, 6], color: 'rgb(183, 204, 146)' },
+                        { range: [6, 7], color: 'rgb(140, 191, 136)' },
+                        { range: [7, 8], color: 'rgb(138, 187, 143)' },
+                        { range: [8, 9], color: 'rgb(133, 180, 138)' },
 
                     ],
                 }
@@ -144,7 +150,6 @@ d3.json("data/samples.json").then((incomingData) => {
                 t: 1,
                 b: 1,
             }
-
         };
         Plotly.newPlot('gauge', datagauge, layoutgauge);
     };
@@ -152,79 +157,84 @@ d3.json("data/samples.json").then((incomingData) => {
     init();
 
     // Call updatePlotly() when a change takes place to select different subject text id
-    d3.selectAll("body").on("change", updatePlotly);
-
-    // Function called when dropdown menue items are selected
-    function updatePlotly() {
-        // Use D3 to select the dropdown menu
-        var inputElement = d3.select("selDataset");
-
-        // Assign the value of the dropdown menu option to a variable
-        // var switchValue = inputElement.node().value;
-
-        // Getting the value property of the input element
-        var inputValue = inputElement.property("value");
-        console.log(inputValue);
-
-        // Use the form input to filter the dataset by id
-        var filteredData = data.samples.filter((sample) => sample.id === inputValue)[0];
-        console.log(filteredData);
-
-        // Selected test id sample_values
-        idSampleValues = filteredData.sample_values;
-
-        // Select test id otu_ids
-        idOtuIds = filteredData.otu_ids;
-
-        // Select test id otu_labels
-        idOtuLabels = filteredData.otu_labels;
-
-        // Select the top 10 OTUs
-        top10Values = idSampleValues.slice(0, 10).reverse();
-        top10Ids = idOtuIds.slice(0, 10).reverse();
-        top10Labels = idOtuLabels.slice(0, 10).reverse();
+    // d3.selectAll("body").on("change", updatePlotly);
 
 
-        // Plot 1: Bar Chart
-        Plotly.restyle("bar", "x", [top10Values]);
-        Plotly.restyle("bar", "y", [top10Ids.map(outId => `OTU ${outId}`)]);
-        Plotly.restyle("bar", "text", [top10Labels]);
 
-        // Plot 2: Bubble Chart
-        Plotly.restlye('bubble', "x", [idOtuIds]);
-        Plotly.restlye('bubble', "y", [idSampleValues]);
-        Plotly.restlye('bubble', "text", [idOtuLabels]);
-        Plotly.restlye('bubble', "market.color", [idOtuIds]);
-        Plotly.restlye('bubble', "marker.size", [idSampleValues]);
-
-        // Demographic information 
-        DemoInfo = data.metadata.filter((sample) => sample.id === inputValue)[0];
-
-        // Clear out current contents in the panel
-
-
-        // Getting a reference to the table using d3
-        var panelBody = d3.select("#sample-metadata");
-        panelBody.html("");
-        // Using d3 to append table row to `p` for each metadata
-        var row = panelBody.append("p");
-        // Using the `Object.entries` to console.log each metadata
-        Object.entries(DemoInfo).forEach(([key, value]) => {
-            console.log(key, value);
-            // Append a cell to the row for each value
-            var cell = row.append("p");
-            cell.text(`${key.toUpperCase()}: ${value}`);
-        });
-
-        // Plot 3: Gauge chart 
-        var advancedwfreq = DemoInfo.wfreq;
-
-        Plotly.restlye('gauge', "value", advancedwfreq);
-
-    };
 });
 
+// d3.selectAll("body").on("change", updatePlotly);
 
 
 
+// Function called when dropdown menue items are selected
+function optionChanged() {
+    // // Use D3 to select the dropdown menu
+    var inputElement = d3.select("#selDataset");
 
+    // // Assign the value of the dropdown menu option to a variable
+    // // var switchValue = inputElement.node().value;
+
+    // // Getting the value property of the input element
+    var inputValue = inputElement.property("value");
+    console.log(inputValue);
+
+    // Use the form input to filter the dataset by id
+    var filteredData = data.samples.filter((sample) => sample.id === inputValue)[0];
+    console.log(filteredData);
+
+    // Selected test id sample_values
+    idSampleValues = filteredData.sample_values;
+
+    // Select test id otu_ids
+    idOtuIds = filteredData.otu_ids;
+
+    // Select test id otu_labels
+    idOtuLabels = filteredData.otu_labels;
+
+    // Select the top 10 OTUs
+    top10Values = idSampleValues.slice(0, 10).reverse();
+    top10Ids = idOtuIds.slice(0, 10).reverse();
+    top10Labels = idOtuLabels.slice(0, 10).reverse();
+
+
+    // Plot 1: Bar Chart
+    Plotly.restyle("bar", "x", [top10Values]);
+    Plotly.restyle("bar", "y", [top10Ids.map(outId => `OTU ${outId}`)]);
+    Plotly.restyle("bar", "text", [top10Labels]);
+
+    // Plot 2: Bubble Chart
+    Plotly.restyle('bubble', "x", [idOtuIds]);
+    Plotly.restyle('bubble', "y", [idSampleValues]);
+    Plotly.restyle('bubble', "text", [idOtuLabels]);
+    Plotly.restyle('bubble', "market.color", [idOtuIds]);
+    Plotly.restyle('bubble', "marker.size", [idSampleValues]);
+
+    // Demographic information 
+    DemoInfo = data.metadata.filter(sample => sample.id === parseInt(inputValue))[0];
+    console.log(data.metadata);
+
+
+    // Clear out current contents in the panel
+
+
+    // Getting a reference to the table using d3
+    var panelBody = d3.select("#sample-metadata");
+    panelBody.html("");
+    // Using d3 to append table row to `p` for each metadata
+    var row = panelBody.append("p");
+    // Using the `Object.entries` to console.log each metadata
+    Object.entries(DemoInfo).forEach(([key, value]) => {
+        console.log(key, value);
+        // Append a cell to the row for each value
+        var cell = row.append("p");
+        cell.text(`${key.toUpperCase()}: ${value}`);
+    });
+
+    // Plot 3: Gauge chart 
+    var advancedwfreq = DemoInfo.wfreq;
+
+    Plotly.restyle('gauge', "value", advancedwfreq);
+
+};
+d3.selectAll("body").on("change", optionChanged);
