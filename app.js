@@ -135,11 +135,9 @@ d3.json("data/samples.json").then((incomingData) => {
                         { range: [6, 7], color: 'rgb(140, 191, 136)' },
                         { range: [7, 8], color: 'rgb(138, 187, 143)' },
                         { range: [8, 9], color: 'rgb(133, 180, 138)' },
-
                     ],
                 }
             }
-
         ];
         var layoutgauge = {
             width: 600,
@@ -153,17 +151,10 @@ d3.json("data/samples.json").then((incomingData) => {
     };
 
     init();
-
-    // Call updatePlotly() when a change takes place to select different subject text id
-    // d3.selectAll("body").on("change", updatePlotly);
-
-
-
 });
 
+// Call updatePlotly() when a change takes place to select different subject text id
 // d3.selectAll("body").on("change", updatePlotly);
-
-
 
 // Function called when dropdown menue items are selected
 function optionChanged() {
@@ -212,12 +203,9 @@ function optionChanged() {
     DemoInfo = data.metadata.filter(sample => sample.id === parseInt(inputValue))[0];
     console.log(data.metadata);
 
-
-    // Clear out current contents in the panel
-
-
     // Getting a reference to the table using d3
     var panelBody = d3.select("#sample-metadata");
+    // Clear out current contents in the panel
     panelBody.html("");
     // Using d3 to append table row to `p` for each metadata
     var row = panelBody.append("p");
