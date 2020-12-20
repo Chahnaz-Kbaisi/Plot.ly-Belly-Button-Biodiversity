@@ -133,6 +133,9 @@ d3.json("data/samples.json").then((incomingData) => {
                 domain: { x: [0, 1], y: [0, 1] },
                 mode: "gauge+number",
                 gauge: {
+                    text: ['8-9', '7-8', '6-7', '5-6', '4-5', '3-4', '2-3', '1-2', '0-1'],
+                    textinfo: 'text',
+                    textposition: 'inside',
                     axis: { range: [null, 9] },
                     bar: { color: "darkgreen" },
                     steps: [

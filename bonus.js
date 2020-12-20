@@ -1,5 +1,5 @@
 // Another way of doing the advanced challenge gauge plot to match given plot sceenshot
-// Code saource: `https://codepen.io/ascotto/pen/eGNaqe?editors=0011`
+// Code source: `https://codepen.io/ascotto/pen/eGNaqe?editors=0011`
 // Advanced Challenge Assignment (Optional)
 // Plot 3: Gauge Chart
 function buildGauge(sample) {
