@@ -44,6 +44,7 @@ d3.json("data/samples.json").then((incomingData) => {
         console.log(sampleotulabels);
 
         // Plot 1: Bar Chart
+        //  Create the Traces
         var trace1 = {
             x: sampleValues,
             y: sampleotuids.map(outId => `OTU ${outId}`),
@@ -52,9 +53,10 @@ d3.json("data/samples.json").then((incomingData) => {
             orientation: "h",
         };
 
-        // data
+        // Create the data array for the plot
         var databar = [trace1];
 
+        // Define the plot layout
         var layoutbar = {
             title: "Top 10 UTOs",
             xaxis: { title: "Sample Values" },
@@ -64,10 +66,12 @@ d3.json("data/samples.json").then((incomingData) => {
             height: 600,
         }
 
+        // Plot the "bar" chart 
         Plotly.newPlot("bar", databar, layoutbar);
 
         // 3. Create a bubble chart that displays each sample.
         // Plot 2: Bubble Chart
+        //  Create the Traces
         var trace2 = {
             x: defaultotuids,
             y: defaultSampleValues,
@@ -79,8 +83,11 @@ d3.json("data/samples.json").then((incomingData) => {
                 size: defaultSampleValues,
             },
         };
+
+        // Create the data array for the plot
         var databubble = [trace2];
 
+        // Define the plot layout
         var layoutbubble = {
             title: 'Sample Display',
             xaxis: { title: "OTU IDs" },
@@ -90,10 +97,11 @@ d3.json("data/samples.json").then((incomingData) => {
             width: 1200,
         };
 
+        // Plot the "bubble" chart 
         Plotly.newPlot('bubble', databubble, layoutbubble);
 
         // Filtering Demographic information 
-        defaultDemographic = data.metadata.filter(sample => sample.id === 940)[0];
+        defaultDemographic = data.metadata.filter(sample => parseInt(sample.id) === 940)[0];
         console.log(defaultDemographic);
 
         // Getting a reference to the table using d3
@@ -110,15 +118,17 @@ d3.json("data/samples.json").then((incomingData) => {
         });
 
         // Advanced Challenge Assignment (Optional)
+        // Please bonus.js for other bonus gauge code matching given screenshot
         // Plot 3: Gauge Chart
         var wfreq = defaultDemographic.wfreq;
         console.log(wfreq);
 
+        // Create the data array for the plot
         var datagauge = [
             {
                 type: "indicator",
                 marker: { size: 28, color: '850000' },
-                title: "Number of Belly Button Washes per Week",
+                title: "<b>Belly Button Washing Frequency</b> <br> Scrubs per Week",
                 value: wfreq,
                 domain: { x: [0, 1], y: [0, 1] },
                 mode: "gauge+number",
@@ -139,6 +149,8 @@ d3.json("data/samples.json").then((incomingData) => {
                 }
             }
         ];
+
+        // Define the plot layout
         var layoutgauge = {
             width: 600,
             height: 400,
@@ -147,9 +159,11 @@ d3.json("data/samples.json").then((incomingData) => {
                 b: 0,
             }
         };
-        Plotly.newPlot('gauge', datagauge, layoutgauge);
-    };
 
+        // Plot the "gauge" chart 
+        Plotly.newPlot('gauge', datagauge, layoutgauge);
+
+    };
     init();
 });
 
@@ -160,9 +174,6 @@ d3.json("data/samples.json").then((incomingData) => {
 function optionChanged() {
     // // Use D3 to select the dropdown menu
     var inputElement = d3.select("#selDataset");
-
-    // // Assign the value of the dropdown menu option to a variable
-    // // var switchValue = inputElement.node().value;
 
     // // Getting the value property of the input element
     var inputValue = inputElement.property("value");
@@ -199,7 +210,7 @@ function optionChanged() {
     Plotly.restyle('bubble', "market.color", [idOtuIds]);
     Plotly.restyle('bubble', "marker.size", [idSampleValues]);
 
-    // Demographic information 
+    // Demographic information
     DemoInfo = data.metadata.filter(sample => sample.id === parseInt(inputValue))[0];
     console.log(data.metadata);
 
@@ -217,10 +228,11 @@ function optionChanged() {
         cell.text(`${key.toUpperCase()}: ${value}`);
     });
 
-    // Plot 3: Gauge chart 
+    // Plot 3: Gauge chart
     var advancedwfreq = DemoInfo.wfreq;
 
     Plotly.restyle('gauge', "value", advancedwfreq);
 
 };
 d3.selectAll("body").on("change", optionChanged);
+
