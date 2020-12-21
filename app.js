@@ -101,6 +101,8 @@ d3.json("data/samples.json").then((incomingData) => {
         // Plot the "bubble" chart 
         Plotly.newPlot('bubble', databubble, layoutbubble);
 
+        // 4. Display the sample metadata, i.e., an individual's demographic information.
+
         // Filtering Demographic information 
         defaultDemographic = data.metadata.filter(sample => parseInt(sample.id) === 940)[0];
         console.log(defaultDemographic);
@@ -119,7 +121,7 @@ d3.json("data/samples.json").then((incomingData) => {
         });
 
         // Advanced Challenge Assignment (Optional)
-        // Please bonus.js for other bonus gauge code matching given screenshot
+        // Please see bonus.js for alternative bonus gauge code matching given screenshot
         // Plot 3: Gauge Chart
         var wfreq = defaultDemographic.wfreq;
         console.log(wfreq);
@@ -166,11 +168,11 @@ d3.json("data/samples.json").then((incomingData) => {
 
         // Plot the "gauge" chart 
         Plotly.newPlot('gauge', datagauge, layoutgauge);
-
     };
     init();
 });
 
+// 5. Display each key-value pair from the metadata JSON object somewhere on the page.
 // Call optionChanged() when a change takes place to select different subject text id
 // Function called when dropdown menue items are selected
 function optionChanged() {
@@ -199,7 +201,7 @@ function optionChanged() {
     top10Ids = idOtuIds.slice(0, 10).reverse();
     top10Labels = idOtuLabels.slice(0, 10).reverse();
 
-
+    // 6. Update all of the plots any time that a new sample is selected.
     // Plot 1: Bar Chart
     Plotly.restyle("bar", "x", [top10Values]);
     Plotly.restyle("bar", "y", [top10Ids.map(outId => `OTU ${outId}`)]);
@@ -234,7 +236,6 @@ function optionChanged() {
     var advancedwfreq = DemoInfo.wfreq;
 
     Plotly.restyle('gauge', "value", advancedwfreq);
-
 };
 d3.selectAll("body").on("change", optionChanged);
 
