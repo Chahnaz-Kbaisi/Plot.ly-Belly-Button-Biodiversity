@@ -92,6 +92,7 @@ d3.json("data/samples.json").then((incomingData) => {
             title: 'Sample Display',
             xaxis: { title: "OTU IDs" },
             yaxis: { title: "Sample Value" },
+            sizemode: "area",
             showlegend: false,
             height: 600,
             width: 1200,
@@ -170,9 +171,7 @@ d3.json("data/samples.json").then((incomingData) => {
     init();
 });
 
-// Call updatePlotly() when a change takes place to select different subject text id
-// d3.selectAll("body").on("change", updatePlotly);
-
+// Call optionChanged() when a change takes place to select different subject text id
 // Function called when dropdown menue items are selected
 function optionChanged() {
     // // Use D3 to select the dropdown menu
