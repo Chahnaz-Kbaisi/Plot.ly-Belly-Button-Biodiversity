@@ -3,7 +3,6 @@
 [Belly Button Biodiversity Dashboard](https://chahnaz-kbaisi.github.io/Plot.ly-Belly-Button-Biodiversity/)
 
 <!------------------------------------------------------------------------------------------------------------------------- -->
-# Plot.ly Homework - Belly Button Biodiversity
 
 ![Bacteria by filterforge.com](https://github.com/Chahnaz-Kbaisi/Plot.ly-Belly-Button-Biodiversity/blob/main/Provided-Images/bacteria.jpg)
 
